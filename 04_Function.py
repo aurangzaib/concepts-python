@@ -75,8 +75,7 @@ function5(x=1, y=2)
 a, b = 1, 2
 
 # Function definition
-def max_function(x, y):
-    return x if x > y else y
+def max_function(x, y): return x if x > y else y
 print(max_function(a, b))
 
 # Lambda expression
@@ -91,59 +90,44 @@ list1 = [1, 2, 3]
 
 # With list comprehension
 list2 = [x * 1.1 for x in list1]
-for item in list2:
-    print(item)
+for item in list2: print(item)
 
 # With lambda expression
 list3 = [lambda x=x: x * 1.1 for x in list1]
-for item in list3:
-    print(item())
+for item in list3: print(item())
 
 # ==========================================================================================================
-# Filter
+# Map, Filter, Reduce
 # ==========================================================================================================
+
+# Map applies the given function/lambda on each element of list
+# https://www.geeksforgeeks.org/python-map-function/
 
 # Filter applies given function/lambda on each element of list to filter the data
 # https://www.geeksforgeeks.org/filter-in-python/
-
-def get_even_number1(input):
-    if input % 2 == 0: return input
-def get_even_number2(input, output=[]):
-    for element in input:
-        output.append(element) if element % 2 == 0 else None
-    return output
-
-whole_numbers = [x for x in range(0, 10, 1)]
-even_numbers1 = list(filter(lambda x: x % 2 == 0, whole_numbers))
-even_numbers2 = list(filter(get_even_number1, whole_numbers))
-even_numbers3 = get_even_number2(whole_numbers)
-
-# ==========================================================================================================
-# Map
-# ==========================================================================================================
-
-# -Map applies the given function/lambda on each element of list
-# -https://www.geeksforgeeks.org/python-map-function/
-
-def mapper(input):
-    return input + 0.1
-input_array = [x for x in range(0, 10)]
-output_array1 = list(map(mapper, input_array))
-output_array2 = list(map(lambda x: x + 0.1, input_array))
-
-# ==========================================================================================================
-# Reduce
-# ==========================================================================================================
 
 # Reduce applies the function/lambda on two elements to get a resultant
 # This resultant is used as an input for next iteration
 # https://www.geeksforgeeks.org/reduce-in-python/
 
-def reducer(input1, input2):
-    print(input1, input2)
-    return input1 + input2
+input_array     = [x for x in range(0, 10, 1)]
 
-input_array = [x for x in range(1, 10)]
-output1 = ft.reduce(reducer, input_array)
-output2 = ft.reduce(lambda x, y: x + y, input_array)
+# ----------------------------------------------------
+# Using Function
+# ----------------------------------------------------
 
+def mapper_(x):     return x + 0.1
+def filter_(x):     return x if x % 2 == 0 else None
+def reducer_(x, y): return x + y
+
+map_result1     = list(map(mapper_, input_array))    # Map
+filter_result1  = list(filter(filter_, input_array)) # Filter
+reduce_result1  = ft.reduce(reducer_, input_array)   # Reduce
+
+# ----------------------------------------------------
+# Using Lambda
+# ----------------------------------------------------
+
+map_result2     = list(map(lambda x: x + 0.1, input_array))       # Map
+filter_result2  = list(filter(lambda x: x % 2 == 0, input_array)) # Filter
+reduce_result2  = ft.reduce(lambda x, y: x * y, input_array)      # Reduce
