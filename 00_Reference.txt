@@ -1,0 +1,15 @@
+=============================================================================================================
+Learning Resources
+=============================================================================================================
+
+1- Geeks For Geeks
+https://www.geeksforgeeks.org/python-programming-language/
+
+2- Programiz
+https://www.programiz.com/python-programming
+
+3- Real Python
+https://realpython.com/tutorials/advanced/
+
+4- Code Academy
+https://www.codecadey.com/learn/learn-advanced-python
