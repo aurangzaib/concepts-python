@@ -1,19 +1,13 @@
-import numpy as np
+import functools as ft
 
 
-def even_number(input, output=[]):
-    for element in input:
-        output.append(element) if (element % 2 == 0) else None
-    return output
+def reducer(i1, i2):
+    print(i1, i2)
+    return i1 + i2
 
 
-def even_number2(input):
-    if input % 2 == 0: return input
-
-
-list1 = [x for x in range(0, 10)]
-list2 = even_number(list1)
-list3 = list(filter(lambda x: x % 2 == 0, list1))
-list4 = list(filter(even_number2, list1))
-
+input_array = [x for x in range(1, 10)]
+output1 = ft.reduce(reducer, input_array)
+output2 = ft.reduce(lambda x, y: x + y, input_array)
+output2 = ft.reduce
 pass
