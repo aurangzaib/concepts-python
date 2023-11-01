@@ -132,5 +132,4 @@ for index, element in enumerate(iterator):
     if index == 4:
         break
 print(next(iterator))  # State of iteration was saved
-print(iterator[1])  # NOT allowed
-
+print(iterator[1])     # NOT allowed

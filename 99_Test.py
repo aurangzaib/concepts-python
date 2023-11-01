@@ -2,8 +2,8 @@
 TODO:
     [x] Iterator
     [x] Generator
-    [+] Closure
-    [+] Decorators
+    [x] Closure
+    [+] Decorator
     [+] Property
     [+] Memoization
     [+] Class
