@@ -20,57 +20,117 @@ import numpy as np
 #  ==========================================================================================================
 #  Python List
 #  ==========================================================================================================
-def python_list():
-    # ----------------------------------------------------
-    # Create
-    # ----------------------------------------------------
-    list1 = [1, 2.2, "3"]
-    # ----------------------------------------------------
-    # Access
-    # ----------------------------------------------------
-    list1[0]
-    list1[-1]
-    # ----------------------------------------------------
-    # Methods
-    # ----------------------------------------------------
-    list1.append(4)              # Add element at the end
-    list1.prepend(4)             # Add element at the start
-    list1.insert(4, 1)           # Add element at the position
-    list1.reverse()              # Reverse elements
-    list1.extend([97, 98, 99])   # Add elements at the end   
-    list1.pop()                  # Remove element at the end
-    list1.pop(1)                 # Remove element at the position
-    list1.remove(1)              # Remove element with value (NOT INDEX)
-    # ----------------------------------------------------
-    # Slicing
-    # ----------------------------------------------------
-    list1[:2]                    # Slice from 1st to 2nd elements
-    list1[2: -2]                 # Slice from 3rd to 2nd last elements
-    list1[2:]                    # Slice from 3rd to last elements
-    # ----------------------------------------------------
-    # Comprehension
-    # ---------------------------------------------------- 
-    list1 = [x*1.1 for x in list]  
-    list1 = [x for x in range(0, 10, 1)]
-    list1 = list(range(0, 10,1))
-    # ----------------------------------------------------
-    # Length
-    # ---------------------------------------------------- 
-    len(list1)
-    # ----------------------------------------------------
-    # Delete
-    # ---------------------------------------------------- 
-    del(list1)
+
+# ----------------------------------------------------
+# Create
+# ----------------------------------------------------
+list1 = [1, 2.2, "3"]
+
+# ----------------------------------------------------
+# Access
+# ----------------------------------------------------
+list1[0]
+list1[-1]
+
+# ----------------------------------------------------
+# Methods
+# ----------------------------------------------------
+list1.append(4)  # Add element at the end
+list1.prepend(4)  # Add element at the start
+list1.insert(4, 1)  # Add element at the position
+list1.reverse()  # Reverse elements
+list1.extend([97, 98, 99])  # Add elements at the end
+list1.pop()  # Remove element at the end
+list1.pop(1)  # Remove element at the position
+list1.remove(1)  # Remove element with value (NOT INDEX)
+
+# ----------------------------------------------------
+# Slicing
+# ----------------------------------------------------
+list1[:2]  # Slice from 1st to 2nd elements
+list1[2:-2]  # Slice from 3rd to 2nd last elements
+list1[2:]  # Slice from 3rd to last elements
+
+# ----------------------------------------------------
+# Comprehension
+# ----------------------------------------------------
+list1 = [x * 1.1 for x in list]
+list1 = [x for x in range(0, 10, 1)]
+list1 = list(range(0, 10, 1))
+
+# ----------------------------------------------------
+# Length
+# ----------------------------------------------------
+len(list1)
+
+# ----------------------------------------------------
+# Delete
+# ----------------------------------------------------
+del list1
+
+# ----------------------------------------------------
+# List using List Comprehension
+# ----------------------------------------------------
+list1 = [x for x in range(10)]
+
+# ----------------------------------------------------
+# List using Generator Comprehension
+# ----------------------------------------------------
+list2 = list((x for x in range(10)))
+
+# ----------------------------------------------------
+# List using Range Generator
+# ----------------------------------------------------
+list3 = list(range(0, 10))
 
 #  ==========================================================================================================
 #  Numpy Array
 #  ==========================================================================================================
-def numpy_array():
-    list2 = np.array([1, 2.2, "3"])
-    list2.tolist()          # Numpy array to python list
-    list2.size()
 
+list2 = np.array([1, 2.2, "3"])
+list2.tolist()  # Numpy array to python list
+list2.size()
 
-if __name__ == "__main__":
-    python_list()
-    numpy_array()
+#  ==========================================================================================================
+#  Dictionary Access
+#  ==========================================================================================================
+
+dict1 = {"x": 1, "y": 1.2}
+dict1.items()  # Key, Value pair
+dict1.keys()  # Keys
+dict1.values()  # Values
+
+#  ==========================================================================================================
+#  Iterators
+#  ==========================================================================================================
+
+# ----------------------------------------------------
+# Iterator Protocol
+# ----------------------------------------------------
+# __iter__(): It returns an iterator object
+# __next__(): It returns the next iterator item
+
+# ----------------------------------------------------
+# Iterable
+# ----------------------------------------------------
+# - It doesn't save current state of iteration
+# - It implements __item__()
+# - It is subscriptable using index
+iterable = [x for x in range(0, 10)]
+print(iterable[1])  # Allowed
+
+# ----------------------------------------------------
+# Iterator
+# ----------------------------------------------------
+# - It saves current state of iteration
+# - It implements __item__() and _next__()
+# - It is NOT subscriptable using index
+# - StopIteration is raised when all elements are already iterated
+iterator = iter(iterable)
+for index, element in enumerate(iterator):
+    print(element)
+    if index == 4:
+        break
+print(next(iterator))  # State of iteration was saved
+print(iterator[1])  # NOT allowed
+
