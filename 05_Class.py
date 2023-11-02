@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 """
 ==========================================================================================================
@@ -11,7 +12,7 @@ Note
 ==========================================================================================================
 
 ----------------------------------------------------
-Dundar (Double underscore)
+Dunder (Double underscore)
 ----------------------------------------------------
 __init__  : Constructor
 __new__   : Constructor with return value 
@@ -62,8 +63,13 @@ Dynamic Attributes
 ----------------------------------------------------
 - Methods/properties can be added on runtime
 
+----------------------------------------------------
+Enum Class
+----------------------------------------------------
+- An iterable class
+- Properties can be of any type
+- Properties are immutable contants
 """
-
 
 # ==========================================================================================================
 # Class
@@ -129,6 +135,21 @@ class PointDtClsConstant:
         print("{} + {}j".format(self.complex.real, self.complex.imaginary))
 
 # ==========================================================================================================
+# Enum Class
+# ==========================================================================================================
+
+class Companies(Enum):
+    BMW         = 99.99
+    Mercedes    = "Mercedes"
+    Porsche     = 101
+    Audi        = 102
+    VW          = 1 + 3j
+
+    @classmethod
+    def method(cls):
+        print(cls.BMW.value)
+
+# ==========================================================================================================
 # Test For Class
 # ==========================================================================================================
 
@@ -166,10 +187,19 @@ def DataClassTester():
 
     point.x     = 3  # Allowed
     pointdc.x   = 3  # Allowed   
-    pointdcct.x = 3  # NOT allowed
+# pointdcct.x = 3    # NOT allowed
 
+# ==========================================================================================================
+# Test For Enum Class
+# ==========================================================================================================
+
+def EnumClassTester():
+    for company in Companies:
+        print("{}:{}".format(company.name, company.value))
+    print(Companies.method())
 
 #---------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     ClassTester()
     DataClassTester()
+    EnumClassTester()
