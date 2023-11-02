@@ -46,10 +46,11 @@ def function2(a_copy, b):
 # ----------------------------------------------------
 # Mutable (Reference)
 # ----------------------------------------------------
-def function3(array, dictionary, instance):
-    array[0] = 99
+def function3(array: list, dictionary: dict, obj: object, instance):
     dictionary["x"] = 99
     instance.x = 99
+    array[0] = 99
+    obj['x'] = 99
 
 # ----------------------------------------------------
 # Default Value
@@ -69,6 +70,11 @@ def function5(*argv):
     for arg in argv:
         print(arg)
 function5(1, 2, 3)
+def dicts(*n_dictionaries):
+    for item in n_dictionaries:
+        for key in item.keys():
+            print(key, item[key])
+dicts({'x': 1, 'y': 2}, {'x': 3, 'y': 4})
 
 # ----------------------------------------------------
 # Variadic Key-value
@@ -131,26 +137,21 @@ for item in list3: print(item())
 # Using Function
 # ----------------------------------------------------
 
-def mapper_(x):
-    return x + 0.1
+def mapper_(x): return x + 0.1
+def filter_(x): return x if x % 2 == 0 else None
+def reducer_(x, y): return x + y
 
-def filter_(x):
-    return x if x % 2 == 0 else None
-
-def reducer_(x, y):
-    return x + y
-
-map_result1 = list(map(mapper_, input_array))  # Map
-filter_result1 = list(filter(filter_, input_array))  # Filter
-reduce_result1 = ft.reduce(reducer_, input_array)  # Reduce
+map_result1 = list(map(mapper_, input_array))           # Map
+filter_result1 = list(filter(filter_, input_array))     # Filter
+reduce_result1 = ft.reduce(reducer_, input_array)       # Reduce
 
 # ----------------------------------------------------
 # Using Lambda
 # ----------------------------------------------------
 
-map_result2 = list(map(lambda x: x + 0.1, input_array))  # Map
-filter_result2 = list(filter(lambda x: x % 2 == 0, input_array))  # Filter
-reduce_result2 = ft.reduce(lambda x, y: x * y, input_array)  # Reduce
+map_result2 = list(map(lambda x: x + 0.1, input_array))             # Map
+filter_result2 = list(filter(lambda x: x % 2 == 0, input_array))    # Filter
+reduce_result2 = ft.reduce(lambda x, y: x * y, input_array)         # Reduce
 
 # ==========================================================================================================
 # Generator
@@ -161,34 +162,31 @@ reduce_result2 = ft.reduce(lambda x, y: x * y, input_array)  # Reduce
 # - Yield pauses the generator execution
 # - Return stops the function execution
 
-file = open(filename, newline="", encoding="utf-8")
+file = open(filename, newline="", encoding="utf-8") # File Object
+iterators = csv.reader(file, delimiter=',')         # Iterators
 
 # ----------------------------------------------------
 # Data Extraction Using Function
 # ----------------------------------------------------
 def data_extraction_function():
-    iterators = csv.reader(file, delimiter=',')    # Iterators
-    return list(iterators)                         # Return
+    return list(iterators)                         # Iterable List (Expensive operation)
 
 # ----------------------------------------------------
 # Data Extraction Using Generator
 # ----------------------------------------------------
 def data_extraction_generator():
-    iterators = csv.reader(file, delimiter=',')    # Iterators
-    for row in iterators: yield row                # Yield
+    for row in iterators: yield row                # Iterator Item (Cheap operation)
 
 # ----------------------------------------------------
 # Data Processing Using Function
 # ----------------------------------------------------
-rows_iterable = data_extraction_function()
-for row in rows_iterable:
+for row in data_extraction_function():
     print("ID: {} Name: {}".format(row[1], row[2]))
 
 # ----------------------------------------------------
 # Data Processing Using Generator
 # ----------------------------------------------------
-rows_iterator = data_extraction_generator()
-for row in rows_iterator:
+for row in data_extraction_generator():
     print("ID: {} Name: {}".format(row[1], row[2]))
 
 # ==========================================================================================================
@@ -200,52 +198,45 @@ for row in rows_iterator:
 # It is a data hiding mechanism
 
 # ----------------------------------------------------
-# Function
+# Function - No data Hiding
 # ----------------------------------------------------
-# No separate scope
-# No data hiding
-def option1():
-    a, b, c = 1, 2, 3
-    return a, b, c
-a1, b1, c1 = option1()
+def get_data_function():
+    data = {'x': 1, 'y': 2}
+    return data
+data = get_data_function()
+print("Using Function: ", data['x'], data['y'])
 
 # ----------------------------------------------------
-# Closure
+# Closure - With data hiding
 # ----------------------------------------------------
-# No separate scope
-# With data hiding
-def option2():
-    a, b, c = 1, 2, 3
-    def _():
-        return a, b, c
+def get_data_closure():
+    data = {'x': 1, 'y': 2}
+    def _(): return data
     return _
-data = option2()
-a2, b2, c2 = data()
+invocable = get_data_closure()
+data = invocable()
+print("Using Closure: ", data['x'], data['y'])
 
 # ----------------------------------------------------
-# Class
+# Class - No data hiding
 # ----------------------------------------------------
-# With separate scope
-# No data hiding
-class option3:
+class get_data_class:
     def __new__(self):
-        self.a, self.b, self.c = 1, 2, 3
+        self.x, self.y = 1, 2
         return self
-data = option3()
-data.a, data.b, data.c
+data = get_data_class()
+print("Using Class: ", data.x, data.y)
 
 # ----------------------------------------------------
-# Functor
+# Functor - With data hiding
 # ----------------------------------------------------
-# With separate scope
-# With data hiding
-class option4:
+class get_data_functor:
     def __call__(self):
-        self.a, self.b, self.c = 1, 2, 3
+        self.x, self.y = 1, 2
         return self
-functor = option4()
-data = functor()
-data.a, data.b, data.c
+instance = get_data_functor()
+data = instance()
+print("Using Functor: ", data.x, data.y)
 
 # ==========================================================================================================
 # Decorator

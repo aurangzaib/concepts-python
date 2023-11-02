@@ -52,13 +52,6 @@ list1[2:-2]  # Slice from 3rd to 2nd last elements
 list1[2:]  # Slice from 3rd to last elements
 
 # ----------------------------------------------------
-# Comprehension
-# ----------------------------------------------------
-list1 = [x * 1.1 for x in list]
-list1 = [x for x in range(0, 10, 1)]
-list1 = list(range(0, 10, 1))
-
-# ----------------------------------------------------
 # Length
 # ----------------------------------------------------
 len(list1)
@@ -81,7 +74,7 @@ list2 = list((x for x in range(10)))
 # ----------------------------------------------------
 # List using Range Generator
 # ----------------------------------------------------
-list3 = list(range(0, 10))
+list3 = list(range(10))
 
 #  ==========================================================================================================
 #  Numpy Array
@@ -96,8 +89,8 @@ list2.size()
 #  ==========================================================================================================
 
 dict1 = {"x": 1, "y": 1.2}
-dict1.items()  # Key, Value pair
-dict1.keys()  # Keys
+dict1.items()   # Key, Value pair
+dict1.keys()    # Keys
 dict1.values()  # Values
 
 #  ==========================================================================================================
@@ -116,7 +109,8 @@ dict1.values()  # Values
 # - It doesn't save current state of iteration
 # - It implements __item__()
 # - It is subscriptable using index
-iterable = [x for x in range(0, 10)]
+# - It is used with function (return)
+iterable = [x for x in range(10)]
 print(iterable[1])  # Allowed
 
 # ----------------------------------------------------
@@ -125,6 +119,7 @@ print(iterable[1])  # Allowed
 # - It saves current state of iteration
 # - It implements __item__() and _next__()
 # - It is NOT subscriptable using index
+# - It is used with generator (yield)
 # - StopIteration is raised when all elements are already iterated
 iterator = iter(iterable)
 for index, element in enumerate(iterator):
@@ -133,3 +128,4 @@ for index, element in enumerate(iterator):
         break
 print(next(iterator))  # State of iteration was saved
 print(iterator[1])     # NOT allowed
+print(*iterator)
