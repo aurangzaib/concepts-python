@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 """
 ==========================================================================================================
 Link
@@ -63,6 +65,10 @@ Dynamic Attributes
 """
 
 
+# ==========================================================================================================
+# Class
+# ==========================================================================================================
+
 class Cls:
 
     # Constructor
@@ -76,11 +82,11 @@ class Cls:
     # Method 
     def print(self): print(self.a)
     
-    # Getter (interface for priv)
+    # Getter (interface for __priv)
     @property
     def priv(self): return self.__priv
     
-    # Setter (interface for priv)
+    # Setter (interface for __priv)
     @priv.setter
     def priv(self, priv): self.__priv = priv
     
@@ -88,22 +94,82 @@ class Cls:
     @classmethod
     def init(cls, *argv, **kwargs): return cls(*argv, **kwargs) # Calling constructor
 
+# ==========================================================================================================
+# Data Class
+# ==========================================================================================================
 
-if __name__ == "__main__":
+@dataclass
+class Complex:
+    real: float = 0.0
+    imaginary: float = 0.0
 
+class PointCls:
+    def __init__(self, complex, x, y, z):
+        self.complex: Complex = complex
+        self.x: int = x
+        self.y: int = y
+        self.z: int = z
+
+@dataclass
+class PointDtCls:
+    complex: Complex
+    x: int = 0.0
+    y: int = 0.0
+    z: int = 0.0
+    def print(self):
+        print("{} + {}j".format(self.complex.real, self.complex.imaginary))
+
+@dataclass(frozen=True)
+class PointDtClsConstant:
+    complex: Complex
+    x: int = 0.0
+    y: int = 0.0
+    z: int = 0.0
+    def print(self):
+        print("{} + {}j".format(self.complex.real, self.complex.imaginary))
+
+# ==========================================================================================================
+# Test For Class
+# ==========================================================================================================
+
+def ClassTester():
     # Instance
-    instance = Cls(1, 2, 3)                     # Using constructor
+    instance1 = Cls(1, 2, 3)                    # Using constructor
     instance2 = Cls.init(9, 10, 11)             # Using class method
 
     # Read/write public properties
-    instance.a = 10
-    print("Public property: ", instance.a)
+    instance1.a = 10
+    print("Public property: ", instance1.a)
     print("Public property: ", instance2.a)
 
-    # Read/write private properties
-    instance.priv = 99                          # Write __priv through priv
-    print("Private property: ", instance.priv)  # Read __priv through priv
-    instance._Cls__priv                         # BAD PRACTICE
+    # Read/write private properties through interface
+    instance1.priv = 99                          # Write __priv through priv
+    print("Private property: ", instance1.priv)  # Read __priv through priv
+    instance1._Cls__priv                         # BAD PRACTICE
 
     # Functor
-    print("Functor: ", instance())
+    print("Functor: ", instance1())
+
+# ==========================================================================================================
+# Test For Data Class
+# ==========================================================================================================
+
+def DataClassTester():
+    complex = Complex(2,3)
+    point = PointCls(complex, 1, 2, 3)
+    pointdc = PointDtCls(complex, 1, 2, 3)
+    pointdcct = PointDtClsConstant(complex, 1, 2, 3)
+
+    print("{} + {}j".format(point.complex.real, point.complex.imaginary))
+    pointdc.print()
+    pointdcct.print()
+
+    point.x     = 3  # Allowed
+    pointdc.x   = 3  # Allowed   
+    pointdcct.x = 3  # NOT allowed
+
+
+#---------------------------------------------------------------------------------------------------------------
+if __name__ == "__main__":
+    ClassTester()
+    DataClassTester()
