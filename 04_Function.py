@@ -27,6 +27,7 @@ input_dict = {"x": 1}
 # ==========================================================================================================
 # - https://realpython.com/introduction-to-python-generators/
 # - https://www.geeksforgeeks.org/generators-in-python/
+# - https://realpython.com/primer-on-python-decorators/
 
 # ==========================================================================================================
 # Parameter
@@ -289,10 +290,10 @@ get_list_2()
 get_list_3()
 
 # ----------------------------------------------------
-# Slow Down Decorator
+# Slowdown Decorator
 # ----------------------------------------------------
 
-def slower(func):
+def slowdown(func):
     @functools.wraps(func)
     def wrapper(*argv, **kwargs):
         data = func(*argv, **kwargs)
@@ -301,7 +302,7 @@ def slower(func):
         return data
     return wrapper
 
-@slower
+@slowdown
 def counter():
     global counter_var
     counter_var += 1
@@ -309,6 +310,41 @@ def counter():
 
 counter_var=0
 for _ in range(10): counter()
+
+# ----------------------------------------------------
+# Nested Decorators
+# ----------------------------------------------------
+
+def decorator1(func):
+    def wrapper(): func(), print("decorator 1")
+    return wrapper
+
+def decorator2(func):
+    def wrapper(): func(), print("decorator 2")
+    return wrapper
+
+@decorator2
+@decorator1
+def function1(): pass
+
+function1()
+
+# ----------------------------------------------------
+# Parameterized Decorators
+# ----------------------------------------------------
+
+def n_times(n=2):
+    def wrapper1(func):
+        def wrapper2(*argv, **kwargs):
+            for _ in range(n): func(*argv, **kwargs)
+        return wrapper2
+    return wrapper1
+
+@n_times(n=5)
+def function1(input):
+    print("Hello World: {}".format(input))
+
+function1(123)
 
 # ==========================================================================================================
 # Memoization
