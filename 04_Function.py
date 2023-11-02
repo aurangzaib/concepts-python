@@ -13,19 +13,20 @@
 
 """
 
-import functools as ft
+from typing import Callable
+import functools
+import time
 import csv
 
 input_array = [x for x in range(0, 10, 1)]
-input_dict = {"x": 1}
 filename = "Resources/dummy.csv"
+input_dict = {"x": 1}
 
 # ==========================================================================================================
 # Link
 # ==========================================================================================================
 # - https://realpython.com/introduction-to-python-generators/
 # - https://www.geeksforgeeks.org/generators-in-python/
-
 
 # ==========================================================================================================
 # Parameter
@@ -46,9 +47,9 @@ def function2(a_copy, b):
 # ----------------------------------------------------
 # Mutable (Reference)
 # ----------------------------------------------------
-def function3(array: list, dictionary: dict, obj: object, instance):
+def function3(array: list, dictionary: dict, obj: object):
     dictionary["x"] = 99
-    instance.x = 99
+    # instance.x = 99
     array[0] = 99
     obj['x'] = 99
 
@@ -61,7 +62,7 @@ def function4(a, b, c=1):
 # ----------------------------------------------------
 # Keyword
 # ----------------------------------------------------
-function3(array=input_array, dictionary=input_dict)
+function3(array=input_array, dictionary=input_dict, obj={'x': 0})
 
 # ----------------------------------------------------
 # Variadic
@@ -141,9 +142,9 @@ def mapper_(x): return x + 0.1
 def filter_(x): return x if x % 2 == 0 else None
 def reducer_(x, y): return x + y
 
-map_result1 = list(map(mapper_, input_array))           # Map
-filter_result1 = list(filter(filter_, input_array))     # Filter
-reduce_result1 = ft.reduce(reducer_, input_array)       # Reduce
+map_result1 = list(map(mapper_, input_array))               # Map
+filter_result1 = list(filter(filter_, input_array))         # Filter
+reduce_result1 = functools.reduce(reducer_, input_array)    # Reduce
 
 # ----------------------------------------------------
 # Using Lambda
@@ -151,7 +152,7 @@ reduce_result1 = ft.reduce(reducer_, input_array)       # Reduce
 
 map_result2 = list(map(lambda x: x + 0.1, input_array))             # Map
 filter_result2 = list(filter(lambda x: x % 2 == 0, input_array))    # Filter
-reduce_result2 = ft.reduce(lambda x, y: x * y, input_array)         # Reduce
+reduce_result2 = functools.reduce(lambda x, y: x * y, input_array)  # Reduce
 
 # ==========================================================================================================
 # Generator
@@ -193,12 +194,12 @@ for row in data_extraction_generator():
 # Closure
 # ==========================================================================================================
 
-# A nested function returned from inside another function
-# It has access to enclosing function scope even after enclosing function is terminated
-# It is a data hiding mechanism
+# - A nested function returned from inside another function
+# - It has access to enclosing function scope even after enclosing function is terminated
+# - It is a data hiding mechanism
 
 # ----------------------------------------------------
-# Function - No data Hiding
+# Function - No data hiding
 # ----------------------------------------------------
 def get_data_function():
     data = {'x': 1, 'y': 2}
@@ -241,6 +242,73 @@ print("Using Functor: ", data.x, data.y)
 # ==========================================================================================================
 # Decorator
 # ==========================================================================================================
+
+# - It is a function inside a function, like closure
+# - It extends input function without modifying it
+
+# ----------------------------------------------------
+# Simple Decorator
+# ----------------------------------------------------
+
+def simple_decorator(func):
+    def wrapper():
+        print("Before calling simple decorated function")
+        func()
+        print("After calling simple decorated function")
+    return wrapper
+
+@simple_decorator
+def simple_function():
+    print("Calling simple function")
+
+simple_function()
+
+# ----------------------------------------------------
+# Timer Decorator
+# ----------------------------------------------------
+
+def timer(func: Callable):
+    @functools.wraps(func)              # Recommended: To retain function information
+    def wrapper(*argv, **kwargs):
+        t1 = time.perf_counter()        # Start time
+        data = func(*argv, **kwargs)    # Call decorated function
+        t2 = time.perf_counter()        # End time
+        print("{}: {:.10f}ms".format(func.__name__ , t2 - t1))
+        return data                     # Return result of decorated function
+    return wrapper                      # Return wrapper
+
+@timer 
+def get_list_1(): return list(range(10))
+@timer
+def get_list_2(): return [x for x in range(10)]
+@timer
+def get_list_3(): return list(x for x in range(10))
+
+get_list_1()
+get_list_2()
+get_list_3()
+
+# ----------------------------------------------------
+# Slow Down Decorator
+# ----------------------------------------------------
+
+def slower(func):
+    @functools.wraps(func)
+    def wrapper(*argv, **kwargs):
+        data = func(*argv, **kwargs)
+        print(data)
+        time.sleep(1)
+        return data
+    return wrapper
+
+@slower
+def counter():
+    global counter_var
+    counter_var += 1
+    return counter_var
+
+counter_var=0
+for _ in range(10): counter()
 
 # ==========================================================================================================
 # Memoization
