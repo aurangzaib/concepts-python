@@ -3,13 +3,14 @@
     [x] Generator
     [x] Closure
     [x] Decorator
-    [+] Property
-    [+] Memoization
-    [+] Class
-    [+] Inheritance
+    [x] Property
+    [+] Memoizaion
+    [x] Class
+    [x] Inheritance
     [+] Polymorphism
     [+] Overloading
     [+] Metaclass
     [+] Exception
     [+] File Handling
 """
+
