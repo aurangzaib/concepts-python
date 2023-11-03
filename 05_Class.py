@@ -25,20 +25,26 @@ __repr__  :
 Attributes
 ----------------------------------------------------
 - Class property
-- Class methods
-
-----------------------------------------------------
-Static method
-----------------------------------------------------
-- It can be called directly using Class
-- Shared across all instances
-- @staticmethod
+- Class method
 
 ----------------------------------------------------
 Instance property
 ----------------------------------------------------
 - It can only be called through instance
 - Unique for an instance
+
+----------------------------------------------------
+Static property
+----------------------------------------------------
+- It can be accessed directly using class
+- Shared across all instances
+
+----------------------------------------------------
+Static method
+----------------------------------------------------
+- It can be called directly using class
+- Shared across all instances
+- @staticmethod
 
 ----------------------------------------------------
 Class method 
@@ -54,7 +60,8 @@ Private property
 ----------------------------------------------------
 Getter/Setter
 ----------------------------------------------------
-- Interface methods: To avoid direct changes to private
+- Interface methods for private property
+- To avoid direct changes to private property
 - @property             -> Read
 - @property.setter      -> Write
 
@@ -111,33 +118,51 @@ class Complex:
 
 class PointCls:
     def __init__(self, complex, x, y, z):
-        self.complex: Complex = complex
+        self.c: Complex = complex
         self.x: int = x
         self.y: int = y
         self.z: int = z
 
 @dataclass
 class PointDtCls:
-    complex: Complex
+    c: Complex
     x: int = 0.0
     y: int = 0.0
     z: int = 0.0
     def print(self):
-        print("{} + {}j".format(self.complex.real, self.complex.imaginary))
+        print("{} + {}j".format(self.c.real, self.c.imaginary))
 
+# ==========================================================================================================
+# Data Class (Frozen)
+# ==========================================================================================================
+
+# ----------------------------------------------------
+# Frozen (nested properties are mutable)
+# ----------------------------------------------------
 @dataclass(frozen=True)
 class PointDtClsConstant:
-    complex: Complex
-    x: int = 0.0
-    y: int = 0.0
-    z: int = 0.0
+    c: Complex
+    X: int = 0.0
+    Y: int = 0.0
+    Z: int = 0.0
     def print(self):
-        print("{} + {}j".format(self.complex.real, self.complex.imaginary))
+        print("{} + {}j".format(self.c.real, self.c.imaginary))
+
+# ----------------------------------------------------
+# Nested Frozen (nested properties are immutable constants)
+# ----------------------------------------------------
+@dataclass(frozen=True)
+class Constants:
+    @dataclass(frozen=True)
+    class __Z: A, B, C = 97, 98, 99
+    # Public properties
+    X, Y, Z = 1, 2, __Z()
 
 # ==========================================================================================================
 # Enum Class
 # ==========================================================================================================
 
+@dataclass(frozen=True)
 class Companies(Enum):
     BMW         = 99.99
     Mercedes    = "Mercedes"
@@ -176,24 +201,31 @@ def ClassTester():
 # ==========================================================================================================
 
 def DataClassTester():
-    complex = Complex(2,3)
-    point = PointCls(complex, 1, 2, 3)
-    pointdc = PointDtCls(complex, 1, 2, 3)
-    pointdcct = PointDtClsConstant(complex, 1, 2, 3)
+    complex     = Complex(2,3)
+    point       = PointCls(complex, 1, 2, 3)
+    pointdc     = PointDtCls(complex, 1, 2, 3)
+    pointdcct   = PointDtClsConstant(complex, 1, 2, 3)
 
-    print("{} + {}j".format(point.complex.real, point.complex.imaginary))
+    print("{} + {}j".format(point.c.real, point.c.imaginary))
     pointdc.print()
     pointdcct.print()
 
-    point.x     = 3  # Allowed
-    pointdc.x   = 3  # Allowed   
-# pointdcct.x = 3    # NOT allowed
+    point.x     = 3             # Allowed
+    pointdc.x   = 3             # Allowed
+#   pointdcct.X = 3             # NOT allowed
+    pointdcct.c.real = 3  # Allowed
+
+    const       = Constants()
+    print(const.X)              # Allowed
+#   const.X     = 11            # NOT allowed
+#   const.Z.A   = 11            # NOT allowed
 
 # ==========================================================================================================
 # Test For Enum Class
 # ==========================================================================================================
 
 def EnumClassTester():
+    # No instance required for Enum classes
     for company in Companies:
         print("{}:{}".format(company.name, company.value))
     print(Companies.method())

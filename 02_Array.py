@@ -110,8 +110,10 @@ dict1.values()  # Values
 # - It implements __item__()
 # - It is subscriptable using index
 # - It is used with function (return)
-iterable = [x for x in range(10)]
-print(iterable[1])  # Allowed
+iterable1 = list(range(10))
+iterable2 = [x for x in range(10)]
+iterable3 = list(x for x in range(10))
+print(iterable2[1])  # Allowed
 
 # ----------------------------------------------------
 # Iterator
@@ -121,11 +123,13 @@ print(iterable[1])  # Allowed
 # - It is NOT subscriptable using index
 # - It is used with generator (yield)
 # - StopIteration is raised when all elements are already iterated
-iterator = iter(iterable)
-for index, element in enumerate(iterator):
+iterator1 = range(10)
+iterator2 = (x for x in range(10))
+iterable3 = iter(iterable1)
+for index, element in enumerate(iterator1):
     print(element)
     if index == 4:
         break
-print(next(iterator))  # State of iteration was saved
-print(iterator[1])     # NOT allowed
-print(*iterator)
+print(next(iterator1))  # State of iteration was saved
+print(iterator1[1])     # NOT allowed
+print(*iterator1)

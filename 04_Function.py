@@ -12,7 +12,7 @@
  ---------------------------------------------------------------------------------------
 
 """
-
+from dataclasses import dataclass
 from typing import Callable
 import functools
 import time
@@ -202,41 +202,50 @@ for row in data_extraction_generator():
 # ----------------------------------------------------
 # Function - No data hiding
 # ----------------------------------------------------
-def get_data_function():
+def get_from_function():
     data = {'x': 1, 'y': 2}
     return data
-data = get_data_function()
+data = get_from_function()
 print("Using Function: ", data['x'], data['y'])
 
 # ----------------------------------------------------
 # Closure - With data hiding
 # ----------------------------------------------------
-def get_data_closure():
+def get_from_closure():
     data = {'x': 1, 'y': 2}
     def _(): return data
     return _
-invocable = get_data_closure()
+invocable = get_from_closure()
 data = invocable()
 print("Using Closure: ", data['x'], data['y'])
 
 # ----------------------------------------------------
 # Class - No data hiding
 # ----------------------------------------------------
-class get_data_class:
+class get_from_class:
     def __new__(self):
         self.x, self.y = 1, 2
         return self
-data = get_data_class()
+data = get_from_class()
+print("Using Class: ", data.x, data.y)
+
+# ----------------------------------------------------
+# Data Class - No data hiding
+# ----------------------------------------------------
+@dataclass
+class get_from_dataclass:
+    x, y = 1,2
+data = get_from_dataclass()
 print("Using Class: ", data.x, data.y)
 
 # ----------------------------------------------------
 # Functor - With data hiding
 # ----------------------------------------------------
-class get_data_functor:
+class get_from_functor:
     def __call__(self):
         self.x, self.y = 1, 2
         return self
-instance = get_data_functor()
+instance = get_from_functor()
 data = instance()
 print("Using Functor: ", data.x, data.y)
 
@@ -290,29 +299,7 @@ get_list_2()
 get_list_3()
 
 # ----------------------------------------------------
-# Slowdown Decorator
-# ----------------------------------------------------
-
-def slowdown(func):
-    @functools.wraps(func)
-    def wrapper(*argv, **kwargs):
-        data = func(*argv, **kwargs)
-        print(data)
-        time.sleep(1)
-        return data
-    return wrapper
-
-@slowdown
-def counter():
-    global counter_var
-    counter_var += 1
-    return counter_var
-
-counter_var=0
-for _ in range(10): counter()
-
-# ----------------------------------------------------
-# Nested Decorators
+# Cascaded Decorators
 # ----------------------------------------------------
 
 def decorator1(func):
@@ -345,6 +332,29 @@ def function1(input):
     print("Hello World: {}".format(input))
 
 function1(123)
+
+# ----------------------------------------------------
+# Slowdown Decorator
+# ----------------------------------------------------
+
+def slowdown(t=0):
+    def wrapper1(func):
+        def wrapper2(*argv, **kwargs):
+            data = func(*argv, **kwargs)
+            time.sleep(t)
+            return data
+        return wrapper2
+    return wrapper1
+
+@slowdown(t=1)
+def printer(param):
+    print(param)
+
+counter = 0
+for _ in range(10):
+    global coutner
+    counter+=1
+    printer(counter)
 
 # ==========================================================================================================
 # Memoization
