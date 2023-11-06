@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 Note
 ==========================================================================================================
 
+- Composition is used instead of Inheritance in the examples below
 - Initial values can be passed on instantiation (as normal class)
 - No constructor needs to be defined
 - Frozen properties can be defined

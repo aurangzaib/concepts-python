@@ -18,8 +18,8 @@ import functools
 import time
 import csv
 
-input_array = [x for x in range(0, 10, 1)]
-filename = "Resources/dummy.csv"
+input_filename = "Resources/dummy.csv"
+input_array = list(range(10))
 input_dict = {"x": 1}
 
 # ==========================================================================================================
@@ -42,7 +42,7 @@ def function1(a, b):
 # ----------------------------------------------------
 # Mutable (Global)
 # ----------------------------------------------------
-def function2(a_copy, b):
+def function2(a_local, b_local):
     global a
 
 # ----------------------------------------------------
@@ -68,15 +68,16 @@ function3(array=input_array, dictionary=input_dict, obj={'x': 0})
 # ----------------------------------------------------
 # Variadic
 # ----------------------------------------------------
+# List
 def function5(*argv):
-    for arg in argv:
-        print(arg)
+    for arg in argv: print(arg)
 function5(1, 2, 3)
-def dicts(*n_dictionaries):
-    for item in n_dictionaries:
-        for key in item.keys():
-            print(key, item[key])
-dicts({'x': 1, 'y': 2}, {'x': 3, 'y': 4})
+# Dictlist
+def dicts(*dictionaries):
+    for dictionary in dictionaries:
+        for key, value in dictionary.items():
+            print(key, value)
+dicts({"x": 1, "y": 2}, {"x": 3, "y": 4})
 
 # ----------------------------------------------------
 # Variadic Key-value
@@ -164,32 +165,44 @@ reduce_result2 = functools.reduce(lambda x, y: x * y, input_array)  # Reduce
 # - Yield pauses the generator execution
 # - Return stops the function execution
 
-file = open(filename, newline="", encoding="utf-8") # File Object
-iterators = csv.reader(file, delimiter=',')         # Iterators
+file        = open(input_filename, newline="", encoding="utf-8") # File Object
+iterators   = csv.reader(file, delimiter=',')                    # Iterators
+batch_size  = 10
 
-# ----------------------------------------------------
-# Data Extraction Using Function
-# ----------------------------------------------------
-def data_extraction_function():
-    return list(iterators)                         # Iterable List (Expensive operation)
+# -------------------------------------------
+# Process Using Generator (Iterator)
+# -------------------------------------------
 
-# ----------------------------------------------------
-# Data Extraction Using Generator
-# ----------------------------------------------------
-def data_extraction_generator():
-    for row in iterators: yield row                # Iterator Item (Cheap operation)
+def fetch_batch_using_iterator():
+    for index, value in enumerate(iterators):
+        if index == batch_size: break
+        yield value
 
-# ----------------------------------------------------
-# Data Processing Using Function
-# ----------------------------------------------------
-for row in data_extraction_function():
-    print("ID: {} Name: {}".format(row[1], row[2]))
+def process_batch_using_iterator():
+    for index, _ in enumerate(iterators):
+        print("Batch: {} ----------------------".format(index))
+        batch = fetch_batch_using_iterator()
+        for row in batch: print("{}  {}".format(row[1], row[2]))
 
-# ----------------------------------------------------
-# Data Processing Using Generator
-# ----------------------------------------------------
-for row in data_extraction_generator():
-    print("ID: {} Name: {}".format(row[1], row[2]))
+process_batch_using_iterator()
+
+# -------------------------------------------
+# Process Using Function (iterable)
+# -------------------------------------------
+
+def fetch_batch_using_iterable(input_list, index):
+    effective_batch_size = index * batch_size
+    return input_list[effective_batch_size : effective_batch_size + batch_size]
+
+def process_batch_using_iterable():
+    input_list = list(iterators)
+    n_iteration = int(len(input_list)/batch_size)
+    for index in range(n_iteration):
+        print("Batch: {} ----------------------".format(index))
+        batch = fetch_batch_using_iterable(input_list, index)
+        for row in batch: print("{}  {}".format(row[1], row[2]))
+
+process_batch_using_iterable()
 
 # ==========================================================================================================
 # Closure

@@ -47,9 +47,9 @@ list1.remove(1)  # Remove element with value (NOT INDEX)
 # ----------------------------------------------------
 # Slicing
 # ----------------------------------------------------
-list1[:2]  # Slice from 1st to 2nd elements
+list1[:2]    # Slice from 1st to 2nd elements
 list1[2:-2]  # Slice from 3rd to 2nd last elements
-list1[2:]  # Slice from 3rd to last elements
+list1[2:]    # Slice from 3rd to last elements
 
 # ----------------------------------------------------
 # Length
@@ -76,11 +76,15 @@ list2 = list((x for x in range(10)))
 # ----------------------------------------------------
 list3 = list(range(10))
 
+# ----------------------------------------------------
+# List using Numpy
+# ----------------------------------------------------
+list4 = np.array(range(10))
+
 #  ==========================================================================================================
 #  Numpy Array
 #  ==========================================================================================================
 
-list2 = np.array([1, 2.2, "3"])
 list2.tolist()  # Numpy array to python list
 list2.size()
 
