@@ -42,21 +42,21 @@ Attributes
 ----------------------------------------------------
 Instance property
 ----------------------------------------------------
-- It can only be called through instance
-- Unique for an instance
+- It can only be accessed through instance
+- Unique for each instance
 
 ----------------------------------------------------
 Static property
 ----------------------------------------------------
-- It can be accessed directly using class
+- It can be accessed through class or instance
 - Shared across all instances
 
 ----------------------------------------------------
 Static method
 ----------------------------------------------------
-- It can be called directly using class
+- It can be called through using class or instance
 - Shared across all instances
-- It has no access to class
+- It has no access to class attributes
 - @staticmethod
 
 ----------------------------------------------------
@@ -74,7 +74,7 @@ Private property
 ----------------------------------------------------
 Getter/Setter
 ----------------------------------------------------
-- Interface to avoid direct changes to private property
+- Interface to avoid direct changes to properties
 - @property             -> Read
 - @propertyname.setter  -> Write
 

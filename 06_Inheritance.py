@@ -59,13 +59,15 @@ print(instance_base.b)
 
 class SubClassInheritance(BaseClass):
     def __init__(self, a, b): super().__init__(a, b)
-    def getter(self):         return super().getter()
+    def getter(self):         return super().getter()       # Note: super is invoked unlike javascript
     def setter(self, value):  return super().setter(value)
-    def printer(self):        print("a:", self.a, "b:", self.b)
+    def printer(self):        super().printer(); print("a:", self.a, "b:", self.b)
 
 instance_sub1 = SubClassInheritance(5, 6)
 print(instance_sub1.getter())
 instance_sub1.printer()
+
+print("------------------------------")
 
 # ==========================================================================================================
 # Composition
@@ -75,7 +77,8 @@ class SubClassComposition1(BaseClass):
     def __init__(self, a, b): self.base = BaseClass(a, b)
     def getter(self):         return {'a': self.base.a, 'b': self.base.b}
     def setter(self, a, b):   self.base.a, self.base.b = a, b
-
+    def printer(self):        self.base.printer()
+               
 instance_sub2 = SubClassComposition1(5, 6)
 instance_sub2.getter()          # Subclass method
 instance_sub2.base.getter()     # Baseclass method

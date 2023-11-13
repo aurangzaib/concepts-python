@@ -67,7 +67,7 @@ def function4(a, b, c=1):
 function3(array=input_array, dictionary=input_dict, obj={'x': 0})
 
 # ----------------------------------------------------
-# Variadic
+# Variadic List
 # ----------------------------------------------------
 # List
 def function5(*argv):

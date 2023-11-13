@@ -45,7 +45,7 @@ class DataClass:
 class NestedDataClass:
     dt: DataClass = field(default_factory=DataClass)
     y : float = 1.1
-    z : int                     # Type attribution is mandatory for empty properties
+    z : int = 0                 # Type attribution is mandatory for empty properties
     def __post_init__(self):    # Post Constructor
         self.z = self.y + 1
 
