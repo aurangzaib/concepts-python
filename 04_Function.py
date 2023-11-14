@@ -16,6 +16,7 @@
 from dataclasses import dataclass
 from typing import Callable
 import functools
+import itertools
 import time
 import csv
 
@@ -66,6 +67,11 @@ def function4(a, b, c=1):
 # ----------------------------------------------------
 function3(array=input_array, dictionary=input_dict, obj={'x': 0})
 
+
+# ==========================================================================================================
+# Variadic Parameter
+# ==========================================================================================================
+
 # ----------------------------------------------------
 # Variadic List
 # ----------------------------------------------------
@@ -88,6 +94,21 @@ def function5(**kwargs):
     for key, value in kwargs.items():
         print("{}: {}".format(key, value))
 function5(x=1, y=2)
+
+# ==========================================================================================================
+# Walrus Operator
+# ==========================================================================================================
+
+def get_status(): return True
+
+# Without Walrus operator
+status1 = get_status()
+if status1 == True:
+    print("Success 1")
+
+# With Walrus operator
+if status2 := get_status() == True:
+    print("Success 2")
 
 # ==========================================================================================================
 # Lambda Expression
@@ -204,6 +225,19 @@ def process_batch_using_iterable():
         for row in batch: print("{}  {}".format(row[1], row[2]))
 
 process_batch_using_iterable()
+
+# ==========================================================================================================
+# Batch
+# ==========================================================================================================
+
+def get_batch(iterator, batch_size):
+    while batch := list(itertools.islice(iterator, batch_size)): yield batch
+
+def use_batch():
+    dataset, size = iter(range(100)), 10
+    for batch in get_batch(dataset, size): print(batch)
+
+use_batch()
 
 # ==========================================================================================================
 # Closure
