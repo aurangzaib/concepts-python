@@ -36,15 +36,28 @@ Association
 # Base
 # ==========================================================================================================
 
+
 class BaseClass:
-    def __init__(self, a, b): self.a, self.__b = a, b
+    def __init__(self, a, b):
+        self.a, self.__b = a, b
+
     @property
-    def b(self):             return self.__b
+    def b(self):
+        return self.__b
+
     @b.setter
-    def b(self, value):      self.__b = value
-    def getter(self):        return self.a      # Can also use @property
-    def setter(self, value): self.a = value     # Can also use @propertyname.setter
-    def printer(self):       print("(a, b): ({}, {})".format(self.a, self.__b))
+    def b(self, value):
+        self.__b = value
+
+    def getter(self):
+        return self.a  # Can also use @property
+
+    def setter(self, value):
+        self.a = value  # Can also use @propertyname.setter
+
+    def printer(self):
+        print("(a, b): ({}, {})".format(self.a, self.__b))
+
 
 instance_base = BaseClass(1, 2)
 instance_base.setter(11)
@@ -54,14 +67,25 @@ print(instance_base.a)
 print(instance_base.b)
 
 # ==========================================================================================================
-# Inheritance
+# Inheritance / Subclassing
 # ==========================================================================================================
 
+
 class SubClassInheritance(BaseClass):
-    def __init__(self, a, b): super().__init__(a, b)
-    def getter(self):         return super().getter()       # Note: super is invoked unlike javascript
-    def setter(self, value):  return super().setter(value)
-    def printer(self):        super().printer(); print("a:", self.a, "b:", self.b)
+    def __init__(self, a, b):
+        # Note: super is invoked unlike javascript
+        super().__init__(a, b)
+
+    def getter(self):
+        return super().getter()
+
+    def setter(self, value):
+        return super().setter(value)
+
+    def printer(self):
+        super().printer()
+        print("a:", self.a, "b:", self.b)
+
 
 instance_sub1 = SubClassInheritance(5, 6)
 print(instance_sub1.getter())
@@ -73,24 +97,37 @@ print("------------------------------")
 # Composition
 # ==========================================================================================================
 
+
 class SubClassComposition1(BaseClass):
-    def __init__(self, a, b): self.base = BaseClass(a, b)
-    def getter(self):         return {'a': self.base.a, 'b': self.base.b}
-    def setter(self, a, b):   self.base.a, self.base.b = a, b
-    def printer(self):        self.base.printer()
-               
+    def __init__(self, a, b):
+        self.base = BaseClass(a, b)
+
+    def getter(self):
+        return {"a": self.base.a, "b": self.base.b}
+
+    def setter(self, a, b):
+        self.base.a, self.base.b = a, b
+
+    def printer(self):
+        self.base.printer()
+
+
 instance_sub2 = SubClassComposition1(5, 6)
-instance_sub2.getter()          # Subclass method
-instance_sub2.base.getter()     # Baseclass method
-instance_sub2.setter(11.1, 9)   # Subclass method
-instance_sub2.base.printer()    # Baseclass method
+instance_sub2.getter()  # Subclass method
+instance_sub2.base.getter()  # Baseclass method
+instance_sub2.setter(11.1, 9)  # Subclass method
+instance_sub2.base.printer()  # Baseclass method
 
 # ==========================================================================================================
 # Composition (Dependency Injection)
 # ==========================================================================================================
 
+
 class SubClassComposition2(BaseClass):
-    def __init__(self, base): self.base = base
+    def __init__(self, base):
+        self.base = base
+
     # ...
+
 
 instance_sub3 = SubClassComposition2(BaseClass(5, 6))

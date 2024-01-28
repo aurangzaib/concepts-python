@@ -22,32 +22,42 @@ Note
 
 - Composition is used instead of Inheritance in the examples below
 - Initial values can be passed on instantiation (as normal class)
+- Always provide the type of property when using dataclass
+    - Without type, static property is defined
+    - With type, instance property is defined
 - No constructor needs to be defined
 - Frozen properties can be defined
-
 """
 
 # ==========================================================================================================
 # Definition
 # ==========================================================================================================
 
+
 class Complex:
     def __init__(self, r=0, i=0.0):
         self.imaginary = i
         self.real = r
-    
+
+
 @dataclass
 class DataClass:
-    c : Complex = Complex()
-    x : int = 1
+    c: Complex = Complex()
+    x: int = 1
+
+    def my_func(self):
+        return self.c
+
 
 @dataclass
 class NestedDataClass:
     dt: DataClass = field(default_factory=DataClass)
-    y : float = 1.1
-    z : int = 0                 # Type attribution is mandatory for empty properties
-    def __post_init__(self):    # Post Constructor
+    y: float = 1.1
+    z: int = 0  # Type attribution is mandatory for empty properties
+
+    def __post_init__(self):  # Post Constructor
         self.z = self.y + 1
+
 
 # ==========================================================================================================
 # Test
